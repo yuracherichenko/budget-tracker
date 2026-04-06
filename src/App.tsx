@@ -38,7 +38,9 @@ function App() {
         <div className="app">
             <h1>Трекер бюджета</h1>
             <div className="balance">
-                <h2>Баланс: {balance} ₽</h2>
+                <h2 style={{ color: balance >= 0 ? '#2ecc71' : '#e74c3c' }}>
+                    Баланс: {balance} ₽
+                </h2>
             </div>
             <div className="form">
                 <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Название" />
