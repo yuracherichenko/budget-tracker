@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './App.css';
 
 interface Transaction {
   id: number;
@@ -33,30 +34,31 @@ function App() {
         setTransactions(transactions.filter(t => t.id !== id));
     };
 
-  return (
-      <div>
-        <h1>Трекер бюджета</h1>
-        <h2>Баланс: {balance} ₽</h2>
-          <div>
-              <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Название" />
-              <input value={amount} onChange={e => setAmount(e.target.value)} placeholder="Сумма" type="number" />
-              <select value={type} onChange={e => setType(e.target.value as 'income' | 'expense')}>
-                  <option value="income">Доход</option>
-                  <option value="expense">Расход</option>
-              </select>
-              <button onClick={addTransaction}>Добавить</button>
-          </div>
-          <ul>
-              {transactions.map(t => (
-                  <li key={t.id}>
-                      {t.title} — {t.type === 'income' ? '+' : '-'}{t.amount} ₽
-                      <button onClick={() => deleteTransaction(t.id)}>✕</button>
-                  </li>
-              ))}
-          </ul>
-      </div>
-
-  );
+    return (
+        <div className="app">
+            <h1>Трекер бюджета</h1>
+            <div className="balance">
+                <h2>Баланс: {balance} ₽</h2>
+            </div>
+            <div className="form">
+                <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Название" />
+                <input value={amount} onChange={e => setAmount(e.target.value)} placeholder="Сумма" type="number" />
+                <select value={type} onChange={e => setType(e.target.value as 'income' | 'expense')}>
+                    <option value="income">Доход</option>
+                    <option value="expense">Расход</option>
+                </select>
+                <button onClick={addTransaction}>Добавить</button>
+            </div>
+            <div>
+                {transactions.map(t => (
+                    <div key={t.id} className={`transaction ${t.type}`}>
+                        <span>{t.title} — {t.type === 'income' ? '+' : '-'}{t.amount} ₽</span>
+                        <button onClick={() => deleteTransaction(t.id)}>✕</button>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
 
 export default App;
