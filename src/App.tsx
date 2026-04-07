@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+
 
 interface Transaction {
   id: number;
@@ -9,7 +10,10 @@ interface Transaction {
 }
 
 function App() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>(() => {
+      const saved = localStorage.getItem('transactions');
+      return saved ? JSON.parse(saved) : [];
+  });
 
   const balance = transactions.reduce((acc, t) =>
       t.type === 'income' ? acc + t.amount : acc - t.amount, 0
@@ -18,6 +22,10 @@ function App() {
     const [title, setTitle] = useState('');
     const [amount, setAmount] = useState('');
     const [type, setType] = useState<'income' | 'expense'>('income');
+
+    useEffect(() => {
+        localStorage.setItem('transactions' ,JSON.stringify(transactions));
+    }, [transactions]);
 
     const addTransaction = () => {
         if (!title || !amount) return;
