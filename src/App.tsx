@@ -44,6 +44,13 @@ function App() {
         setTransactions(transactions.filter(t => t.id !== id));
     };
 
+    const categoryStats = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, t) => {
+            acc[t.category] = (acc[t.category] || 0) + t.amount;
+            return acc;
+        }, {} as Record<string, number>);
+
     return (
         <div className="app">
             <h1>Трекер бюджета</h1>
@@ -78,7 +85,14 @@ function App() {
                     </div>
                 ))}
             </div>
+            <div className="balance">
+                <h3>Расходы по категориям:</h3>
+                {Object.entries(categoryStats).map(([cat, sum]) => (
+                    <p key={cat}>{cat}: -{sum} ₽</p>
+                ))}
+            </div>
         </div>
+
     );
 }
 
