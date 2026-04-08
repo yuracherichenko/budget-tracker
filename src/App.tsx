@@ -7,6 +7,7 @@ interface Transaction {
   title: string;
   amount: number;
   type: 'income' | 'expense';
+  category: string;
 }
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
   const balance = transactions.reduce((acc, t) =>
       t.type === 'income' ? acc + t.amount : acc - t.amount, 0
   );
-
+    const [category, setCategory] = useState('');
     const [title, setTitle] = useState('');
     const [amount, setAmount] = useState('');
     const [type, setType] = useState<'income' | 'expense'>('income');
@@ -33,7 +34,8 @@ function App() {
             id: Date.now(),
             title,
             amount: Number(amount),
-            type
+            type,
+            category,
         }]);
         setTitle('');
         setAmount('');
@@ -54,15 +56,24 @@ function App() {
                 <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Название" />
                 <input value={amount} onChange={e => setAmount(e.target.value)} placeholder="Сумма" type="number" />
                 <select value={type} onChange={e => setType(e.target.value as 'income' | 'expense')}>
+
                     <option value="income">Доход</option>
                     <option value="expense">Расход</option>
+                </select>
+                <select value={category} onChange={e => setCategory(e.target.value)}>
+                    <option value="">Выберите категорию</option>
+                    <option value="еда">Еда</option>
+                    <option value="транспорт">Транспорт</option>
+                    <option value="зарплата">Зарплата</option>
+                    <option value="развлечения">Развлечения</option>
+                    <option value="другое">Другое</option>
                 </select>
                 <button onClick={addTransaction}>Добавить</button>
             </div>
             <div>
                 {transactions.map(t => (
                     <div key={t.id} className={`transaction ${t.type}`}>
-                        <span>{t.title} — {t.type === 'income' ? '+' : '-'}{t.amount} ₽</span>
+                        <span>{t.title} [{t.category}] — {t.type === 'income' ? '+' : '-'}{t.amount} ₽</span>
                         <button onClick={() => deleteTransaction(t.id)}>✕</button>
                     </div>
                 ))}
